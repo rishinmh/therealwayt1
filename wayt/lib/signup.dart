@@ -45,6 +45,7 @@ class _SignupPageState extends State<SignupPage> {
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: const Color.fromARGB(255, 2, 22, 53),
+                        fontFamily: 'Poppins', // Keep Poppins for "JOURNEY"
                       ),
                     ),
                   ],
@@ -56,12 +57,18 @@ class _SignupPageState extends State<SignupPage> {
                   height: 220, // Increased image size
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'ADVENTURE AWAITS',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.blue[900],
-                    fontWeight: FontWeight.bold, // Bold text
+                SizedBox(
+                  width: 320, // Match the width of the image
+                  child: Center(
+                    child: Text(
+                      'ADVENTURE AWAITS',
+                      style: TextStyle(
+                        fontSize: 24, // Bigger font size
+                        color: Colors.black, // Changed to black
+                        fontWeight: FontWeight.bold, // Bold text
+                        fontFamily: 'Homenaje', // Homenaje font
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -88,7 +95,11 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                     child: const Text(
                       'Register',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins', // Keep Poppins for other text
+                        fontSize: 14, // Smaller font size
+                      ),
                     ),
                   ),
                 ),
@@ -97,21 +108,33 @@ class _SignupPageState extends State<SignupPage> {
                   onPressed: () {},
                   child: const Text(
                     'Have an account? Log In',
-                    style: TextStyle(color: Colors.blue),
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontFamily: 'Poppins', // Keep Poppins for other text
+                      fontSize: 14, // Smaller font size
+                    ),
                   ),
                 ),
                 const Spacer(),
                 const Center(
                   child: Text(
                     'We need permission for the service you use',
-                    style: TextStyle(color: Colors.black), // Changed to black
+                    style: TextStyle(
+                      color: Colors.black, // Changed to black
+                      fontFamily: 'Poppins', // Keep Poppins for other text
+                      fontSize: 14, // Smaller font size
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 const Center(
                   child: Text(
                     'Learn More',
-                    style: TextStyle(color: Colors.black), // Changed to black
+                    style: TextStyle(
+                      color: Colors.black, // Changed to black
+                      fontFamily: 'Poppins', // Keep Poppins for other text
+                      fontSize: 14, // Smaller font size
+                    ),
                   ),
                 ),
               ],
@@ -127,10 +150,18 @@ class _SignupPageState extends State<SignupPage> {
       width: 280,
       height: 40, // Smaller text box
       child: TextField(
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(
+          color: Colors.white,
+          fontFamily: 'Poppins', // Keep Poppins for text boxes
+          fontSize: 14, // Smaller font size
+        ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(color: Colors.white70),
+          labelStyle: const TextStyle(
+            color: Colors.white70,
+            fontFamily: 'Poppins', // Keep Poppins for text boxes
+            fontSize: 14, // Smaller font size
+          ),
           filled: true,
           fillColor: const Color.fromARGB(255, 1, 25, 60),
           border: OutlineInputBorder(
@@ -148,10 +179,18 @@ class _SignupPageState extends State<SignupPage> {
       height: 40, // Smaller text box
       child: TextField(
         obscureText: _obscurePassword,
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(
+          color: Colors.white,
+          fontFamily: 'Poppins', // Keep Poppins for text boxes
+          fontSize: 14, // Smaller font size
+        ),
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(color: Colors.white70),
+          labelStyle: const TextStyle(
+            color: Colors.white70,
+            fontFamily: 'Poppins', // Keep Poppins for text boxes
+            fontSize: 14, // Smaller font size
+          ),
           filled: true,
           fillColor: const Color.fromARGB(255, 1, 25, 60),
           border: OutlineInputBorder(

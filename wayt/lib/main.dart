@@ -14,21 +14,19 @@ class MyApp extends StatelessWidget {
       title: 'Wayt App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const WaytHomePage(
-        title: 'Wayt Home Page',
-      ), // Updated to WaytHomePage
+      home: const WaytHomePage(title: 'Wayt Home Page'),
     );
   }
 }
 
 class WaytHomePage extends StatefulWidget {
   const WaytHomePage({super.key, required this.title});
-
   final String title;
 
   @override
-  State<WaytHomePage> createState() => _WaytHomePageState(); // Updated state class name
+  State<WaytHomePage> createState() => _WaytHomePageState();
 }
 
 class _WaytHomePageState extends State<WaytHomePage> {
@@ -51,7 +49,7 @@ class _WaytHomePageState extends State<WaytHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         title: Text(widget.title),
       ),
       body: Center(

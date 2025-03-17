@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'login.dart'; // Import the login page
-import 'signup.dart'; // Import the signup page
 
 void main() {
   runApp(const MyApp());

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wayt/explore.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,18 @@ class HomePage extends StatefulWidget {
               height: 120,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 120,
+                  width: double.infinity,
+                  color: Colors.grey.withOpacity(0.1),
+                  child: const Icon(
+                    Icons.broken_image,
+                    color: Colors.grey,
+                    size: 40,
+                  ),
+                );
+              },
             ),
           ),
           Padding(
@@ -291,7 +304,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
 
-            // Top Trips (Horizontal Scroller)
+            // Top Trips (Small Rectangle Image Boxes)
             const Text(
               "Top Trips",
               style: TextStyle(
@@ -311,11 +324,7 @@ class _HomePageState extends State<HomePage> {
                   final spot = filteredSpots[index];
                   return Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: widget._tripCard(
-                      spot["name"]!,
-                      spot["price"]!,
-                      spot["image"]!,
-                    ),
+                    child: _smallImageBox(spot["name"]!, spot["image"]!),
                   );
                 },
               ),
@@ -357,40 +366,109 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            // Home Button
             IconButton(
               icon: const Icon(
                 Icons.home_outlined,
                 color: Color.fromARGB(255, 1, 25, 60),
                 size: 28,
               ),
-              onPressed: () {},
+              onPressed: () {
+                // Navigate to HomePage (or stay on the current page)
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              },
             ),
+
+            // Explore Button (Second Button)
             IconButton(
               icon: const Icon(
                 Icons.search_outlined,
                 color: Color.fromARGB(255, 1, 25, 60),
                 size: 28,
               ),
-              onPressed: () {},
+              onPressed: () {
+                // Navigate to ExplorePage
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ExplorePage()),
+                );
+              },
             ),
+
+            // Profile Button
             IconButton(
               icon: const Icon(
                 Icons.person_outline,
                 color: Color.fromARGB(255, 1, 25, 60),
                 size: 28,
               ),
-              onPressed: () {},
+              onPressed: () {
+                // Navigate to ProfilePage (if you have one)
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const ProfilePage()),
+                // );
+              },
             ),
+
+            // Other Button
             IconButton(
               icon: const Icon(
                 Icons.auto_awesome,
                 color: Color.fromARGB(255, 1, 25, 60),
                 size: 28,
               ),
-              onPressed: () {},
+              onPressed: () {
+                // Add functionality for this button
+              },
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Small Rectangle Image Box for Top Trips
+  Widget _smallImageBox(String name, String imageUrl) {
+    return SizedBox(
+      width: 120,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              imageUrl,
+              height: 100,
+              width: 120,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 100,
+                  width: 120,
+                  color: Colors.grey.withOpacity(0.1),
+                  child: const Icon(
+                    Icons.broken_image,
+                    color: Colors.grey,
+                    size: 40,
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            name,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -413,6 +491,18 @@ class _HomePageState extends State<HomePage> {
               height: 180,
               width: double.infinity,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 180,
+                  width: double.infinity,
+                  color: Colors.grey.withOpacity(0.1),
+                  child: const Icon(
+                    Icons.broken_image,
+                    color: Colors.grey,
+                    size: 40,
+                  ),
+                );
+              },
             ),
           ),
           Padding(

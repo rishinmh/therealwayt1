@@ -6,64 +6,6 @@ class HomePage extends StatefulWidget {
 
   @override
   _HomePageState createState() => _HomePageState();
-
-  Widget _tripCard(String name, String price, String imageUrl) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 2,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-            child: Image.network(
-              imageUrl,
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: 120,
-                  width: double.infinity,
-                  color: Colors.grey.withOpacity(0.1),
-                  child: const Icon(
-                    Icons.broken_image,
-                    color: Colors.grey,
-                    size: 40,
-                  ),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              name,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Text(
-              price,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 12,
-                color: Colors.grey,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _HomePageState extends State<HomePage> {

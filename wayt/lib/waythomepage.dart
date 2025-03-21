@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wayt/explore.dart';
+import 'package:wayt/profile_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -348,11 +349,10 @@ class _HomePageState extends State<HomePage> {
                 size: 28,
               ),
               onPressed: () {
-                // Navigate to ProfilePage (if you have one)
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const ProfilePage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileScreen()),
+                );
               },
             ),
 

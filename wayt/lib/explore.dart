@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
+import 'booking_selector.dart'; // Import Booking Selector Page
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});
@@ -19,6 +20,7 @@ class _ExplorePageState extends State<ExplorePage> {
   Marker? _userMarker;
   final LatLng _toronto = LatLng(43.65107, -79.347015);
   final Completer<GoogleMapController> _controller = Completer();
+  double _currentZoom = 12.0; // Initial Zoom Level
 
   // Map Marker Set
   final Set<Marker> _markers = {};
@@ -62,9 +64,25 @@ class _ExplorePageState extends State<ExplorePage> {
     _mapController.animateCamera(
       CameraUpdate.newLatLngZoom(
         LatLng(position.latitude, position.longitude),
-        12,
+        _currentZoom,
       ),
     );
+  }
+
+  // Zoom In Function
+  void _zoomIn() {
+    setState(() {
+      _currentZoom += 1;
+      _mapController.animateCamera(CameraUpdate.zoomIn());
+    });
+  }
+
+  // Zoom Out Function
+  void _zoomOut() {
+    setState(() {
+      _currentZoom -= 1;
+      _mapController.animateCamera(CameraUpdate.zoomOut());
+    });
   }
 
   @override
@@ -79,8 +97,10 @@ class _ExplorePageState extends State<ExplorePage> {
           style: poppinsStyle(22, FontWeight.w700, Colors.white),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {},
+          icon: Icon(Icons.arrow_back, color: Colors.blue.shade900),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(
@@ -100,9 +120,12 @@ class _ExplorePageState extends State<ExplorePage> {
                 _controller.complete(controller);
                 _mapController = controller;
               },
-              initialCameraPosition: CameraPosition(target: _toronto, zoom: 5),
+              initialCameraPosition: CameraPosition(
+                target: _toronto,
+                zoom: _currentZoom,
+              ),
               markers: _markers,
-              zoomControlsEnabled: false,
+              zoomControlsEnabled: false, // Disable default zoom controls
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               mapType: MapType.terrain,
@@ -137,13 +160,43 @@ class _ExplorePageState extends State<ExplorePage> {
             ),
           ),
 
-          // 🚀 Floating "Start" Button
+          // 🔍 Zoom Controls (Bottom Right)
+          Positioned(
+            bottom: 100,
+            right: 20,
+            child: Column(
+              children: [
+                FloatingActionButton(
+                  heroTag: "zoomIn",
+                  onPressed: _zoomIn,
+                  backgroundColor: Colors.blue.shade900,
+                  child: Icon(Icons.add, color: Colors.white),
+                ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  heroTag: "zoomOut",
+                  onPressed: _zoomOut,
+                  backgroundColor: Colors.blue.shade900,
+                  child: Icon(Icons.remove, color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+
+          // 🚀 Floating "Start" Button (Navigate to BookingSelectorPage)
           Positioned(
             bottom: 40,
             left: 20,
             right: 20,
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookingSelectorPage(),
+                  ),
+                );
+              },
               icon: Icon(
                 FontAwesomeIcons.planeDeparture,
                 color: Colors.white,
@@ -169,13 +222,14 @@ class _ExplorePageState extends State<ExplorePage> {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
+        currentIndex: 1, // Make Explore selected by default
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
-          // Handle navigation
+          // Handle navigation logic here
         },
       ),
     );

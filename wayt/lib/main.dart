@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'login.dart'; // Import the login page
 import 'explore.dart'; // Import the explore page
+import 'booking_selector.dart'; // Import the booking selector page
 
 void main() {
   runApp(const MyApp());
@@ -21,6 +22,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const LoginPage(), // Set LoginPage as the main page
+      routes: {
+        '/explore': (context) => const ExplorePage(),
+        '/booking': (context) => BookingSelectorPage(),
+      },
     );
   }
 }

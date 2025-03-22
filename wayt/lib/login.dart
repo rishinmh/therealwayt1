@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wayt/waythomepage.dart';
-import 'signup.dart'; // Import the signup page
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,31 +11,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _rememberMe = false; // State for the "Remember Me" checkbox
-  bool _obscurePassword = true; // State for password visibility
-  final TextEditingController _usernameController = TextEditingController();
+  bool _rememberMe = false;
+  bool _obscurePassword = true;
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login(BuildContext context) {
-    final username = _usernameController.text.trim();
-    final password = _passwordController.text.trim();
-
-    // Simple authentication check
-    if (username == "admin" && password == "admin") {
-      // Navigate to HomePage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else {
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Invalid username or password"),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,15 +28,12 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/login_page.png', // Ensure this image exists in assets
+              'assets/login_page.png',
               fit: BoxFit.cover,
             ),
           ),
-
-          // Bottom Section (Blue Box)
           Positioned(
             bottom: 0,
             left: 0,
@@ -58,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               decoration: const BoxDecoration(
-                color: Color(0xFF0A2A50), // Match the blue shade in the image
+                color: Color(0xFF0A2A50),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
@@ -79,8 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20),
                   _buildTextField(
-                    "Username, Email or Phone Number",
-                    controller: _usernameController,
+                    "Email",
+                    controller: _emailController,
                   ),
                   const SizedBox(height: 10),
                   _buildTextField(
@@ -103,14 +86,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Text Field
-  Widget _buildTextField(
-    String hint, {
+  Widget _buildTextField(String hint, {
     bool isPassword = false,
     TextEditingController? controller,
   }) {
     return SizedBox(
-      height: 40, // Even smaller text box
+      height: 40,
       child: TextField(
         controller: controller,
         obscureText: isPassword && _obscurePassword,
@@ -119,58 +100,45 @@ class _LoginPageState extends State<LoginPage> {
           hintStyle: const TextStyle(
             fontFamily: 'Poppins',
             color: Colors.white70,
-            fontSize: 12, // Smaller font size
+            fontSize: 12,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none, // Remove border
+            borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.white.withOpacity(0.2), // Slight transparency
+          fillColor: Colors.white.withOpacity(0.2),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 15,
             vertical: 10,
           ),
-          suffixIcon:
-              isPassword
-                  ? IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.white70,
-                      size: 20, // Smaller icon
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  )
-                  : null,
+          suffixIcon: isPassword
+              ? IconButton(
+            icon: Icon(
+              _obscurePassword ? Icons.visibility : Icons.visibility_off,
+              color: Colors.white70,
+              size: 20,
+            ),
+            onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+          )
+              : null,
         ),
         style: const TextStyle(color: Colors.white, fontSize: 12),
       ),
     );
   }
 
-  // Remember Me Checkbox
   Widget _buildCheckbox() {
     return SizedBox(
-      height: 30, // Shorter row
+      height: 30,
       child: Row(
         children: [
           Checkbox(
             value: _rememberMe,
-            onChanged: (value) {
-              setState(() {
-                _rememberMe = value ?? false;
-              });
-            },
+            onChanged: (value) => setState(() => _rememberMe = value ?? false),
             activeColor: Colors.white,
             checkColor: Colors.blue,
-            materialTapTargetSize:
-                MaterialTapTargetSize.shrinkWrap, // Smaller checkbox
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
           const Text(
             "Remember Me",
@@ -197,12 +165,44 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Login Button
   Widget _buildLoginButton(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.3, // 1/3 of the screen width
+      width: MediaQuery.of(context).size.width * 0.3,
       child: ElevatedButton(
-        onPressed: () => _login(context), // Call login function
+        onPressed: () async {
+          try {
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+            );
+          } on FirebaseAuthException catch (e) {
+            String errorMessage = 'Login failed. Please try again.';
+            if (e.code == 'user-not-found') {
+              errorMessage = 'No user found with that email.';
+            } else if (e.code == 'wrong-password') {
+              errorMessage = 'Wrong password provided.';
+            } else if (e.code == 'invalid-email') {
+              errorMessage = 'Invalid email format.';
+            }
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMessage),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error occurred: $e'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 10),
           backgroundColor: Colors.white.withOpacity(0.9),
@@ -219,15 +219,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Register Option
   Widget _buildRegisterOption(BuildContext context) {
     return TextButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SignupPage()),
-        );
-      },
+      onPressed: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SignupPage()),
+      ),
       child: const Text(
         "Don't have an account? Register",
         style: TextStyle(
